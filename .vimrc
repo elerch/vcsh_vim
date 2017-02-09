@@ -13,6 +13,9 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   silent !url=https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim &&
     \ { curl -fLo ~/.vim/autoload/plug.vim $url || wget -O ~/.vim/autoload/plug.vim $url; }
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  " After plugins installed, kill the window it created
+  autocmd VimEnter * sleep 1
+  autocmd VimEnter * q
 endif
 
 " Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
