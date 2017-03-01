@@ -1,16 +1,11 @@
 set t_Co=256
-colorscheme desert
+colorscheme molokai
 syntax enable
 set number
 set laststatus=2
 set tabstop=2 softtabstop=0 expandtab shiftwidth=2 smarttab
 set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
 set colorcolumn=80
-
-" http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html
-" http://vim.wikia.com/wiki/Xterm256_color_names_for_console_Vim
-highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
-highlight ColorColumn ctermbg=234 guibg=#1c1c1c
 
 " Install plug.vim if it doesn't exist
 if empty(glob('~/.vim/autoload/plug.vim'))
