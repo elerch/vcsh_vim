@@ -40,7 +40,8 @@ set foldenable        " enable folding
 set foldlevelstart=10 " leave most folds open - beyond 10? refactor!
 set foldnestmax=10    " only allow 10 nested folds ^^^^^^^^^^^^^^^^^
 set foldmethod=indent " indent (rather than marker). Not sure this is right
-inoremap jk <esc>     " 'jk' in quick succession in insert mode = escape 
+" 'jk' in quick succession in insert mode = escape
+inoremap jk <esc>
                       " (this is the *BOMB*)
 set incsearch         " incremenal search
 set hlsearch          " highlight search terms after search is complete
