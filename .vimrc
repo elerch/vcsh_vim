@@ -4,6 +4,21 @@
 " https://dougblack.io/words/a-good-vimrc.html
 set t_Co=256        " 256 color terminal (probably too heavy-handed)
 colorscheme molokai " molokai colors pleasing to me
+let mapleader=","   " change leader to ',' from default '\'
+" Remove background color (originally 233). By doing this we can
+" leverage terminal transparency (as long as it's dark)
+" we use VimEnter rather than ColorScheme because we only want to fire this
+" once on startup. After that, if you switch color schemes you're on your
+" own. This helps with the below *get out of jail free card" if you're
+" on a terminal with a white background
+autocmd VimEnter * hi Normal ctermbg=None
+" Add shortcut to put it back in case we're on an ugly terminal
+" The ctermbg will mess with comment colors in a bad way, so we'll restore
+" by just setting colorscheme. This works due to the use of VimEnter above
+nnoremap <silent> <leader>o :colorscheme molokai<CR>
+" The shortcut to put it back wouldn't be complete without another to put
+" transparent background back in!
+nnoremap <silent> <leader>t :colorscheme molokai<CR>:hi Normal ctermbg=None<CR>
 syntax enable       " enable syntax highlighting because why wouldn't you?
 set number          " show line numbers
 set showcmd         " show command prefix in lower right
@@ -29,7 +44,6 @@ inoremap jk <esc>     " 'jk' in quick succession in insert mode = escape
                       " (this is the *BOMB*)
 set incsearch         " incremenal search
 set hlsearch          " highlight search terms after search is complete
-let mapleader=","     " change leader to ',' from default '\'
 " leader-x clears search hl
 nnoremap <silent> <leader>x :nohlsearch<Bar>:echo<CR>
 " leader-f to toggle folds
