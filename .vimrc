@@ -49,6 +49,12 @@ set hlsearch          " highlight search terms after search is complete
 nnoremap <silent> <leader>x :nohlsearch<Bar>:echo<CR>
 " leader-f to toggle folds
 nnoremap <leader>f za " leader-f open/closes folds
+" copy/paste from system clipboard (note linux differs between clipboard and
+" primary)
+nnoremap <leader>v "*p
+nnoremap <leader>V "+p
+nnoremap <leader>c "*y
+nnoremap <leader>C "+y
 
 " Install plug.vim if it doesn't exist
 if empty(glob('~/.vim/autoload/plug.vim'))
