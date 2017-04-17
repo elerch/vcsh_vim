@@ -3,6 +3,7 @@
 " Many settings were gathered from here though:
 " https://dougblack.io/words/a-good-vimrc.html
 set t_Co=256        " 256 color terminal (probably too heavy-handed)
+set encoding=utf-8  " termux on android needed this but nothing else?
 colorscheme molokai " molokai colors pleasing to me
 let mapleader=","   " change leader to ',' from default '\'
 " Remove background color (originally 233). By doing this we can
