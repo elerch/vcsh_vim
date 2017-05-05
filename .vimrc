@@ -20,6 +20,13 @@ nnoremap <silent> <leader>o :colorscheme molokai<CR>
 " The shortcut to put it back wouldn't be complete without another to put
 " transparent background back in!
 nnoremap <silent> <leader>t :colorscheme molokai<CR>:hi Normal ctermbg=None<CR>
+" Leader s to save the file
+nnoremap <silent> <leader>s :update<CR>
+inoremap <leader>s <C-O>:update<CR>
+vnoremap <leader>s <C-C>:update<CR>
+" Leader k makes a checkmark (✓)
+inoremap <leader>k <C-k>OK
+nnoremap <leader>k i<C-k>OK <esc>h
 syntax enable       " enable syntax highlighting because why wouldn't you?
 set number          " show line numbers
 set showcmd         " show command prefix in lower right
