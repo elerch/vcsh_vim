@@ -80,6 +80,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'vim-syntastic/syntastic'
 Plug 'mtscout6/syntastic-local-eslint.vim'
 Plug 'editorconfig/editorconfig'
+Plug 'benmills/vimux'
 call plug#end()
 
 " Syntastic
@@ -93,3 +94,12 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 let g:syntastic_javascript_checkers = ['eslint']
+
+" Vimux bindings - we interact with tmux, so the prefix is t
+nnoremap <leader>tp :VimuxPromptCommand<CR>
+nnoremap <leader>tl :VimuxRunLastCommand<CR>
+nnoremap <leader>ti :VimuxInspectRunner<CR>
+nnoremap <leader>tx :VimuxInterruptRunner<CR>
+nnoremap <leader>tq :VimuxCloseRunner<CR>
+" Use <bind-key> z to restore runner pane
+nnoremap <leader>tz :VimuxZoomRunner<CR>
