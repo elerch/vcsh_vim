@@ -27,6 +27,9 @@ vnoremap <leader>s <C-C>:update<CR>
 " Leader k makes a checkmark (✓)
 inoremap <leader>k <C-k>OK
 nnoremap <leader>k i<C-k>OK <esc>h
+" Leader dg does a diffget
+nnoremap <leader>dg :diffget
+
 syntax enable       " enable syntax highlighting because why wouldn't you?
 set number          " show line numbers
 set showcmd         " show command prefix in lower right
