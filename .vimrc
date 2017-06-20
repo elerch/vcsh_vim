@@ -81,6 +81,7 @@ Plug 'vim-syntastic/syntastic'
 Plug 'mtscout6/syntastic-local-eslint.vim'
 Plug 'editorconfig/editorconfig'
 Plug 'benmills/vimux'
+Plug 'rust-lang/rust.vim'
 call plug#end()
 
 " Syntastic
