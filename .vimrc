@@ -102,6 +102,7 @@ let g:syntastic_javascript_checkers = ['eslint']
 " Vimux bindings - we interact with tmux, so the prefix is t
 nnoremap <leader>tp :VimuxPromptCommand<CR>
 nnoremap <leader>tl :VimuxRunLastCommand<CR>
+inoremap <leader>tl <C-O>:VimuxRunLastCommand<CR>
 nnoremap <leader>ti :VimuxInspectRunner<CR>
 nnoremap <leader>tx :VimuxInterruptRunner<CR>
 nnoremap <leader>tq :VimuxCloseRunner<CR>
