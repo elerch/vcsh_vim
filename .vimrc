@@ -107,3 +107,6 @@ nnoremap <leader>tx :VimuxInterruptRunner<CR>
 nnoremap <leader>tq :VimuxCloseRunner<CR>
 " Use <bind-key> z to restore runner pane
 nnoremap <leader>tz :VimuxZoomRunner<CR>
+
+" Golang uses tabs
+au Filetype go setlocal shiftwidth=4 tabstop=4 softtabstop=4 noexpandtab
