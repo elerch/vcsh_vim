@@ -2,7 +2,10 @@
 " https://github.com/tpope/vim-sensible/blob/master/plugin/sensible.vim
 " Many settings were gathered from here though:
 " https://dougblack.io/words/a-good-vimrc.html
-set t_Co=256        " 256 color terminal (probably too heavy-handed)
+" The t_Co below is indeed too heavy-handed. Make sure your $TERM is
+" set properly and let vim figure this out. Neovim generally ignores this
+" value
+"set t_Co=256        " 256 color terminal (probably too heavy-handed)
 set encoding=utf-8  " termux on android needed this but nothing else?
 colorscheme molokai " molokai colors pleasing to me
 let mapleader=","   " change leader to ',' from default '\'
