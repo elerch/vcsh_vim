@@ -83,24 +83,42 @@ endif
 
 " Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
 call plug#begin('~/.vim/plugged')
-Plug 'vim-syntastic/syntastic'
 Plug 'mtscout6/syntastic-local-eslint.vim'
 Plug 'editorconfig/editorconfig'
 Plug 'benmills/vimux'
 Plug 'rust-lang/rust.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'airblade/vim-gitgutter'
+" Plug 'mildred/vim-bufmru' Not needed because ctrlp
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'w0rp/ale'
 call plug#end()
 
-" Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+" Airline
+" Not airline per-se, but this will turn off showing the mode in the command
+" line. Since airline is doing this in the status we don't need it in
+" the command line as well
+set noshowmode
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+" Required by airline
+set hidden
+set nocompatible
+let g:airline_theme='distinguished'
+let g:airline#extensions#tabline#enabled = 1
+" Only show buffers at the top if there are more than 1
+let g:airline#extensions#tabline#buffer_min_count =2
+" Enable ale warning/error count on status line
+let g:airline#extensions#ale#enabled = 1
+let airline#extensions#ale#error_symbol = '☠  '
+let airline#extensions#ale#warning_symbol = '⚠ '
 
-let g:syntastic_javascript_checkers = ['eslint']
+" Set Ctrl-P to mixed mode, which will search buffers, files, mru
+let g:ctrlp_cmd='CtrlPMixed'
+
+" Let ale use Ctrl-k/Ctrl-J to navigate between errors
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " Vimux bindings - we interact with tmux, so the prefix is t
 nnoremap <leader>tp :VimuxPromptCommand<CR>
