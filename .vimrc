@@ -93,6 +93,13 @@ Plug 'airblade/vim-gitgutter'
 " Plug 'mildred/vim-bufmru' Not needed because ctrlp
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'w0rp/ale'
+if !has('nvim')
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+" Also: pip3 install --user neovim jedi mistune psutil setproctitle
+if has('python3')
+  Plug 'roxma/nvim-completion-manager'
+endif
 call plug#end()
 
 " Airline
@@ -119,6 +126,9 @@ let g:ctrlp_cmd='CtrlPMixed'
 " Let ale use Ctrl-k/Ctrl-J to navigate between errors
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+" Hide completion stuff on command line
+set shortmess+=c
 
 " Vimux bindings - we interact with tmux, so the prefix is t
 nnoremap <leader>tp :VimuxPromptCommand<CR>
