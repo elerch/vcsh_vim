@@ -98,6 +98,7 @@ endif
 if has('python3')
   Plug 'roxma/nvim-completion-manager'
 endif
+Plug 'tomtom/tcomment_vim'
 call plug#end()
 
 " Airline
