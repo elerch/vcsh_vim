@@ -83,14 +83,12 @@ endif
 
 " Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
 call plug#begin('~/.vim/plugged')
-Plug 'mtscout6/syntastic-local-eslint.vim'
 Plug 'editorconfig/editorconfig'
 Plug 'benmills/vimux'
 Plug 'rust-lang/rust.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
-" Plug 'mildred/vim-bufmru' Not needed because ctrlp
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'w0rp/ale'
 if !has('nvim')
