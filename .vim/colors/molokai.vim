@@ -26,6 +26,12 @@ else
     let s:molokai_original = 0
 endif
 
+if exists("g:molokai_transparent_bg")
+    let s:molokai_transparent_bg = g:molokai_transparent_bg
+else
+    let s:molokai_transparent_bg = 0
+endif
+
 
 hi Boolean         guifg=#AE81FF
 hi Character       guifg=#E6DB74
@@ -120,7 +126,11 @@ if s:molokai_original == 1
    hi NonText         guifg=#75715E
    hi SpecialKey      guifg=#75715E
 else
-   hi Normal          guifg=#F8F8F2 guibg=#1B1D1E
+   if s:molokai_transparent_bg == 1
+     hi Normal          guifg=#F8F8F2 guibg=none
+   else
+     hi Normal          guifg=#F8F8F2 guibg=#1B1D1E
+   endif
    hi Comment         guifg=#7E8E91
    hi CursorLine                    guibg=#293739
    hi CursorLineNr    guifg=#FD971F               gui=none
@@ -140,7 +150,11 @@ if &t_Co > 255
       hi CursorLine               ctermbg=235   cterm=none
       hi CursorLineNr ctermfg=208               cterm=none
    else
-      hi Normal       ctermfg=252 ctermbg=233
+      if s:molokai_transparent_bg == 1
+        hi Normal       ctermfg=252 ctermbg=none
+      else
+        hi Normal       ctermfg=252 ctermbg=233
+      endif
       hi CursorLine               ctermbg=234   cterm=none
       hi CursorLineNr ctermfg=208               cterm=none
    endif
@@ -273,4 +287,6 @@ end
 
 " Must be at the end, because of ctermbg=234 bug.
 " https://groups.google.com/forum/#!msg/vim_dev/afPqwAFNdrU/nqh6tOM87QUJ
-set background=dark
+if !exists("g:molokai_transparent_bg")
+  set background=dark
+endif
