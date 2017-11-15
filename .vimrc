@@ -95,8 +95,10 @@ endif
 " Also: pip3 install --user neovim jedi mistune psutil setproctitle
 if has('python3')
   Plug 'roxma/nvim-completion-manager'
+  " Language Server Protocol - works with nvim-completion-manager
+  Plug 'autozimu/LanguageClient-neovim'
 endif
-Plug 'tomtom/tcomment_vim'
+Plug 'tomtom/tcomment_vim' " Commenting gcc or gc-motion
 call plug#end()
 
 " Airline
@@ -116,6 +118,19 @@ let g:airline#extensions#tabline#buffer_min_count =2
 let g:airline#extensions#ale#enabled = 1
 let airline#extensions#ale#error_symbol = '☠  '
 let airline#extensions#ale#warning_symbol = '⚠ '
+
+" Set LanguageClient configuration
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ 'javascript': ['/opt/javascript-typescript-langserver/lib/language-server-stdio.js'],
+    \ }
+
+" Automatically start language servers.
+let g:LanguageClient_autoStart = 1
+
+nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <leader>r :call LanguageClient_textDocument_rename()<CR>
 
 " Set Ctrl-P to mixed mode, which will search buffers, files, mru
 let g:ctrlp_cmd='CtrlPMixed'
