@@ -107,7 +107,7 @@ call plug#end()
 " the command line as well
 set noshowmode
 
-" Required by airline
+" Required by airline - allows operation on hidden buffers
 set hidden
 set nocompatible
 let g:airline_theme='distinguished'
