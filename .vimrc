@@ -7,22 +7,20 @@
 " value
 "set t_Co=256        " 256 color terminal (probably too heavy-handed)
 set encoding=utf-8  " termux on android needed this but nothing else?
+" true color support in neovim - breaks background
+if has("termguicolors")
+  set termguicolors
+endif
+let g:molokai_transparent_bg=1
 colorscheme molokai " molokai colors pleasing to me
 let mapleader=","   " change leader to ',' from default '\'
-" Remove background color (originally 233). By doing this we can
-" leverage terminal transparency (as long as it's dark)
-" we use VimEnter rather than ColorScheme because we only want to fire this
-" once on startup. After that, if you switch color schemes you're on your
-" own. This helps with the below *get out of jail free card" if you're
-" on a terminal with a white background
-autocmd VimEnter * hi Normal ctermbg=None
 " Add shortcut to put it back in case we're on an ugly terminal
 " The ctermbg will mess with comment colors in a bad way, so we'll restore
 " by just setting colorscheme. This works due to the use of VimEnter above
-nnoremap <silent> <leader>o :colorscheme molokai<CR>
+nnoremap <silent> <leader>o :let g:molokai_transparent_bg=0<CR>:colorscheme molokai<CR>
 " The shortcut to put it back wouldn't be complete without another to put
 " transparent background back in!
-nnoremap <silent> <leader>t :colorscheme molokai<CR>:hi Normal ctermbg=None<CR>
+nnoremap <silent> <leader>t :let g:molokai_transparent_bg=1<CR>:colorscheme molokai<CR>
 " Leader s to save the file
 nnoremap <silent> <leader>s :update<CR>
 inoremap <leader>s <C-O>:update<CR>
