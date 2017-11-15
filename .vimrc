@@ -138,6 +138,10 @@ let g:ctrlp_cmd='CtrlPMixed'
 " Let ale use Ctrl-k/Ctrl-J to navigate between errors
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
+let g:ale_sign_error = '☠  '
+let g:ale_sign_warning = '⚠ '
+highlight clear ALEErrorSign
+highlight clear ALEWarningSign
 
 " Hide completion stuff on command line
 set shortmess+=c
