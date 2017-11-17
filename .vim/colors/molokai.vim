@@ -127,7 +127,7 @@ if s:molokai_original == 1
    hi SpecialKey      guifg=#75715E
 else
    if s:molokai_transparent_bg == 1
-     hi Normal          guifg=#F8F8F2 guibg=none
+     hi Normal          guifg=#F8F8F2 guibg=NONE
    else
      hi Normal          guifg=#F8F8F2 guibg=#1B1D1E
    endif

@@ -7,8 +7,8 @@
 " value
 "set t_Co=256        " 256 color terminal (probably too heavy-handed)
 set encoding=utf-8  " termux on android needed this but nothing else?
-" true color support in neovim - breaks background
-if has("termguicolors")
+" true color support in neovim
+if has("termguicolors") && has("nvim")
   set termguicolors
 endif
 let g:molokai_transparent_bg=1
