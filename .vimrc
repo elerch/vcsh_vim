@@ -110,6 +110,9 @@ set noshowmode
 " Required by airline - allows operation on hidden buffers
 set hidden
 set nocompatible
+if !empty(glob("$HOME/.fonts/PowerlineSymbols.otf"))
+  let g:airline_powerline_fonts = 1
+endif
 let g:airline_theme='distinguished'
 let g:airline#extensions#tabline#enabled = 1
 " Only show buffers at the top if there are more than 1
