@@ -119,14 +119,25 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_min_count =2
 " Enable ale warning/error count on status line
 let g:airline#extensions#ale#enabled = 1
-let airline#extensions#ale#error_symbol = '☠  '
+" '✖ '
+let airline#extensions#ale#error_symbol = '✗ '
 let airline#extensions#ale#warning_symbol = '⚠ '
 
 " Set LanguageClient configuration
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-    \ 'javascript': ['/opt/javascript-typescript-langserver/lib/language-server-stdio.js'],
-    \ }
+let g:LanguageClient_serverCommands = {}
+" Rust (really fragile install - read directions on github https://github.com/rust-lang-nursery/rls)
+let g:LanguageClient_serverCommands.rust = ['rustup', 'run', 'nightly', 'rls']
+" Javascript/Typescript (still fragile install)
+if !empty(glob('~/.nvm/versions/node/v8.7.0/lib/node_modules/javascript-typescript-langserver/lib/language-server-stdio.js'))
+    " using nvm, npm install -g javascript-typescript-langserver
+    let g:LanguageClient_serverCommands.javascript = [glob('~/.nvm/versions/node/v8.7.0/lib/node_modules/javascript-typescript-langserver/lib/language-server-stdio.js')]
+endif
+" Go
+if !empty(glob('$GOPATH/bin/go-langserver'))
+    " go get github.com/sourcegraph/go-langserver
+    " go get github.com/nsf/gocode
+    let g:LanguageClient_serverCommands.go = [glob('$GOPATH/bin/go-langserver')]
+endif
 
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
@@ -141,11 +152,16 @@ let g:ctrlp_cmd='CtrlPMixed'
 " Let ale use Ctrl-k/Ctrl-J to navigate between errors
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
-let g:ale_sign_error = '☠  '
-let g:ale_sign_warning = '⚠ '
-highlight clear ALEErrorSign
-highlight clear ALEWarningSign
-
+" '✗ ' '✖ '
+let g:ale_sign_error = '✗'
+" '⚠ '
+let g:ale_sign_warning = '▲'
+"highlight clear ALEErrorSign
+"hi ALEErrorSign guifg=#FF0000
+"highlight clear ALEWarningSign
+au Filetype go let g:ale_linters['go'] = ['go build', 'golint', 'gofmt', 'go vet']
+au Filetype go let g:ale_fixers['go'] = ['gofmt', 'goimports']
+nnoremap <leader>c :ALEFix<CR>
 " Hide completion stuff on command line
 set shortmess+=c
 
