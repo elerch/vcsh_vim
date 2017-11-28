@@ -62,6 +62,9 @@ hi Ignore          guifg=#808080 guibg=bg
 hi IncSearch       guifg=#C4BE89 guibg=#000000
 
 hi Keyword         guifg=#F92672               gui=bold
+hi ALEErrorSign    guifg=#F92672 guibg=#232526 gui=bold
+" #ef5939 is an orangish, but it's not quite differentiating enough
+hi ALEWarningSign  guifg=#E6DB74 guibg=#232526 gui=bold
 hi Label           guifg=#E6DB74               gui=none
 hi Macro           guifg=#C4BE89               gui=italic
 hi SpecialKey      guifg=#66D9EF               gui=italic
@@ -187,6 +190,8 @@ if &t_Co > 255
    hi IncSearch       ctermfg=193 ctermbg=16
 
    hi keyword         ctermfg=161               cterm=bold
+   hi ALEErrorSign    ctermfg=161 ctermbg=235   cterm=bold
+   hi ALEWarningSign  ctermfg=144 ctermbg=235   cterm=bold
    hi Label           ctermfg=229               cterm=none
    hi Macro           ctermfg=193
    hi SpecialKey      ctermfg=81
