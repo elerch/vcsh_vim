@@ -78,6 +78,10 @@ nnoremap <leader>V "*p
 vnoremap <leader>c "+y
 vnoremap <leader>C "*y
 
+" delete buffer, retain position
+" https://superuser.com/questions/289285/how-to-close-buffer-without-closing-the-window
+command Bd bp | sp | bn | bd
+
 " Install plug.vim if it doesn't exist
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !mkdir -p ~/.vim/autoload
