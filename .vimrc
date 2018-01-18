@@ -67,10 +67,16 @@ nnoremap <silent> <leader>x :nohlsearch<Bar>:echo<CR>
 nnoremap <leader>f za " leader-f open/closes folds
 " copy/paste from system clipboard (note linux differs between clipboard and
 " primary)
-nnoremap <leader>v "*p
-nnoremap <leader>V "+p
-nnoremap <leader>c "*y
-nnoremap <leader>C "+y
+" + register is the clipboard in X11 (Ctrl-Shift-V in some terminals)
+" * register is the cut buffer (three finger click paste operation) (a.k.a.
+" PRIMARY)
+nnoremap <leader>a :%y+<CR>
+nnoremap <leader>A :%y*<CR>
+nnoremap <leader>v "+p
+nnoremap <leader>V "*p
+" This most makes sense in visual mode
+vnoremap <leader>c "+y
+vnoremap <leader>C "*y
 
 " Install plug.vim if it doesn't exist
 if empty(glob('~/.vim/autoload/plug.vim'))
