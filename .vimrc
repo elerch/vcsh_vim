@@ -30,6 +30,10 @@ inoremap <leader>k <C-k>OK
 nnoremap <leader>k i<C-k>OK <esc>h
 " Leader dg does a diffget
 nnoremap <leader>dg :diffget
+" Leader u to underline
+nnoremap <leader>u yyp<C-v>$r-j
+" Leader U to underline (=)
+nnoremap <leader>U yyp<C-v>$r=j
 
 syntax enable       " enable syntax highlighting because why wouldn't you?
 set number          " show line numbers
