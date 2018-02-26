@@ -176,8 +176,10 @@ let g:ale_sign_warning = '▲'
 au Filetype go let g:ale_linters['go'] = ['go build', 'golint', 'gofmt', 'go vet']
 au Filetype go let g:ale_fixers['go'] = ['gofmt', 'goimports']
 nnoremap <leader>c :ALEFix<CR>
-" Hide completion stuff on command line
-set shortmess+=c
+" Hide completion stuff on command line (nvim only)
+if has('nvim')
+  set shortmess+=c
+endif
 
 " Vimux bindings - we interact with tmux, so the prefix is t
 nnoremap <leader>tp :VimuxPromptCommand<CR>
