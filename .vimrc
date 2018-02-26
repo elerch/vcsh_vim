@@ -109,8 +109,11 @@ endif
 " Also: pip3 install --user neovim jedi mistune psutil setproctitle
 if has('python3')
   Plug 'roxma/nvim-completion-manager'
-  " Language Server Protocol - works with nvim-completion-manager
-  Plug 'autozimu/LanguageClient-neovim'
+  " neovim 0.x.x also reports version as 800 so this is ok
+  if v:version >= 800
+    " Language Server Protocol - works with nvim-completion-manager
+    Plug 'autozimu/LanguageClient-neovim'
+  endif
 endif
 Plug 'tomtom/tcomment_vim' " Commenting gcc or gc-motion
 call plug#end()
