@@ -95,6 +95,7 @@ endif
 
 " Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
 call plug#begin('~/.vim/plugged')
+Plug 'chaoren/vim-wordmotion'
 Plug 'editorconfig/editorconfig'
 Plug 'benmills/vimux'
 Plug 'rust-lang/rust.vim'
