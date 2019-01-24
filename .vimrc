@@ -151,10 +151,11 @@ if !empty(glob('~/.nvm/versions/node/v8.7.0/lib/node_modules/javascript-typescri
     let g:LanguageClient_serverCommands.javascript = [glob('~/.nvm/versions/node/v8.7.0/lib/node_modules/javascript-typescript-langserver/lib/language-server-stdio.js')]
 endif
 " Go
-if !empty(glob('$GOPATH/bin/go-langserver'))
+let s:output = system('command -v go-langserver')
+if !v:shell_error
     " go get github.com/sourcegraph/go-langserver
-    " go get github.com/nsf/gocode
-    let g:LanguageClient_serverCommands.go = [glob('$GOPATH/bin/go-langserver')]
+    " go nomodules get github.com/nsf/gocode
+    let g:LanguageClient_serverCommands.go = [s:output]
 endif
 
 " Automatically start language servers.
