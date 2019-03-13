@@ -42,6 +42,7 @@ set cursorline      " highlight the current line
 set laststatus=2    " show status line
 filetype indent on  " allow different indentation by filetype
                     " e.g. ~/.vim/indent/python.vim for python
+filetype plugin on  " Omnisharp needs this
 set wildmenu        " visual autocomplete for command menu
 set lazyredraw      " don't redraw during macros
 set showmatch       " show matches in searches
@@ -109,12 +110,33 @@ if !has('nvim')
 endif
 " Also: pip3 install --user neovim jedi mistune psutil setproctitle
 if has('python3')
-  Plug 'roxma/nvim-completion-manager'
   " neovim 0.x.x also reports version as 800 so this is ok
   if v:version >= 800
-    " Language Server Protocol - works with nvim-completion-manager
-    Plug 'autozimu/LanguageClient-neovim'
+    " Only using fzf for lsp. It isn't totally necessary and the install
+    " messes with .bashrc and .zshrc, so I shall leave it commented for now
+    " PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run the install script
+    " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+
+    " The plugins here theoretically work with vim8 but I suspect things
+    " will be broken. Have not tested.
+    Plug 'roxma/nvim-yarp'
+    Plug 'ncm2/ncm2'
+    " Language Server Protocol - works with ncm2
+    Plug 'autozimu/LanguageClient-neovim', {
+        \ 'branch': 'next',
+        \ 'do': 'bash install.sh'
+        \ }
+    Plug 'ncm2/ncm2-bufword'
+    Plug 'ncm2/ncm2-path'
+    " Use <TAB> to select the popup menu:
+    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+    " Use silent! here because on first run we don't want an error to appear
+    autocmd BufEnter * silent! call ncm2#enable_for_buffer()
+    au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
+    au User Ncm2PopupClose set completeopt=menuone
   endif
+  Plug 'OmniSharp/omnisharp-vim'
 endif
 Plug 'tomtom/tcomment_vim' " Commenting gcc or gc-motion
 call plug#end()
@@ -143,27 +165,26 @@ let airline#extensions#ale#warning_symbol = '⚠ '
 
 " Set LanguageClient configuration
 let g:LanguageClient_serverCommands = {}
-" Rust (really fragile install - read directions on github https://github.com/rust-lang-nursery/rls)
-let g:LanguageClient_serverCommands.rust = ['rustup', 'run', 'nightly', 'rls']
-" Javascript/Typescript (still fragile install)
-if !empty(glob('~/.nvm/versions/node/v8.7.0/lib/node_modules/javascript-typescript-langserver/lib/language-server-stdio.js'))
-    " using nvm, npm install -g javascript-typescript-langserver
-    let g:LanguageClient_serverCommands.javascript = [glob('~/.nvm/versions/node/v8.7.0/lib/node_modules/javascript-typescript-langserver/lib/language-server-stdio.js')]
-endif
-" Go
-let s:output = system('command -v go-langserver')
-if !v:shell_error
-    " go get github.com/sourcegraph/go-langserver
-    " go nomodules get github.com/nsf/gocode
-    let g:LanguageClient_serverCommands.go = [s:output]
-endif
+" let g:LanguageClient_loggingLevel = 'INFO'
+" let g:LanguageClient_loggingFile =  expand('/tmp/LanguageClient.log')
+" let g:LanguageClient_serverStderr = expand('/tmp/LanguageServer.log')
 
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
 
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+" Should this be 'fi'? In C# there are multiple, and that's what OmniSharp
+" recommends
+nnoremap <silent> gi :call LanguageClient_textDocument_implementation()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> gD :call LanguageClient_textDocument_typeDefinition()<CR>
 nnoremap <silent> <leader>r :call LanguageClient_textDocument_rename()<CR>
+"nnoremap <silent> <Leader><Space> :call LanguageClient_contextMenu()<CR>
+nnoremap <silent> <Leader><Space> :call LanguageClient_textDocument_codeAction()<CR>
+nnoremap <silent> cf :call LanguageClient_textDocument_formatting()<CR>
+"Document highlight kills syntax highlighting
+" nnoremap <silent> fu :call LanguageClient_textDocument_documentHighlight()<CR>
+" nnoremap <silent> fx :call LanguageClient_clearDocumentHighlight()<CR>
 
 " Set Ctrl-P to mixed mode, which will search buffers, files, mru
 let g:ctrlp_cmd='CtrlPMixed'
@@ -178,8 +199,13 @@ let g:ale_sign_warning = '▲'
 "highlight clear ALEErrorSign
 "hi ALEErrorSign guifg=#FF0000
 "highlight clear ALEWarningSign
-au Filetype go let g:ale_linters['go'] = ['go build', 'golint', 'gofmt', 'go vet']
-au Filetype go let g:ale_fixers['go'] = ['gofmt', 'goimports']
+
+"there's probably a better way to do this, but we'll create a toggle for
+"yaml/cloudformation
+au Filetype cloudformation set syntax=yaml
+au Filetype cloudformation nmap <silent> <leader>t :set filetype=yaml<CR>
+au Filetype yaml nmap <silent> <leader>t :set filetype=cloudformation<CR>
+
 nnoremap <leader>c :ALEFix<CR>
 " Hide completion stuff on command line (nvim only)
 if has('nvim')
@@ -196,5 +222,156 @@ nnoremap <leader>tq :VimuxCloseRunner<CR>
 " Use <bind-key> z to restore runner pane
 nnoremap <leader>tz :VimuxZoomRunner<CR>
 
+" Git gutter colors - I want my green back! :)
+highlight GitGutterAdd ctermfg=2 ctermbg=236 guifg=#009900 guibg=#232526
+highlight GitGutterChange ctermfg=3 ctermbg=236 guifg=#bbbb00 guibg=#232526
+highlight GitGutterDelete ctermfg=1 ctermbg=236 guifg=#ff2222 guibg=#232526
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Program Language Specific configuration
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Javacript
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Javascript/Typescript (still fragile install)
+if !empty(glob('~/.nvm/versions/node/v8.7.0/lib/node_modules/javascript-typescript-langserver/lib/language-server-stdio.js'))
+    " using nvm, npm install -g javascript-typescript-langserver
+    let g:LanguageClient_serverCommands.javascript = [glob('~/.nvm/versions/node/v8.7.0/lib/node_modules/javascript-typescript-langserver/lib/language-server-stdio.js')]
+endif
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Rust
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Rust directions on github https://github.com/rust-lang/rls
+let g:LanguageClient_serverCommands.rust = ['rustup', 'run', 'stable', 'rls']
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Go
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Official go language server is in the works, so everything else is kind of
+" broken. Bingo is the best for now in early 2019
+let s:output = system('command -v bingo')
+if !v:shell_error
+    " go get github.com/sourcegraph/go-langserver
+    " go nomodules get github.com/nsf/gocode
+    let g:LanguageClient_serverCommands.go = ['bingo']
+    let g:LanguageClient_rootMarkers = { 'go': ['.git', 'go.mod'] }
+endif
 " Golang uses tabs
 au Filetype go setlocal shiftwidth=4 tabstop=4 softtabstop=4 noexpandtab
+au Filetype go let g:ale_linters['go'] = ['go build', 'golint', 'gofmt', 'go vet']
+au Filetype go let g:ale_fixers['go'] = ['gofmt', 'goimports']
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Python
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Python (pip install --user python-language-server)
+let s:output = system('command -v pyls')
+if !v:shell_error
+    let g:LanguageClient_serverCommands.python = ['pyls']
+endif
+
+" flake8 is better and we should not fall back to pylint
+au Filetype python let g:ale_linters['python'] = ['flake8']
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" C#
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Omnisharp. From a langauge server perspective it's kind of broken, but the
+" direct plugin works ok, so we let Omnisharp override some of the Langauge
+" Server bindings below
+
+let s:output = system(expand('command -v ~/.omnisharp/omnisharp-roslyn/bin/mono.linux-x86_64'))
+if !v:shell_error
+  " No worky: https://github.com/OmniSharp/omnisharp-roslyn/issues/1191
+   let g:LanguageClient_serverCommands.cs = [expand('~/.omnisharp/omnisharp-roslyn/bin/mono.linux-x86_64'), expand('~/.omnisharp/omnisharp-roslyn/omnisharp/OmniSharp.exe'), '--languageserver', '--verbose' ]
+endif
+
+" Set the type lookup function to use the preview window instead of echoing it
+"let g:OmniSharp_typeLookupInPreview = 1
+
+" Timeout in seconds to wait for a response from the server
+let g:OmniSharp_timeout = 5
+
+" Don't autoselect first omnicomplete option, show options even if there is only
+" one (so the preview documentation is accessible). Remove 'preview' if you
+" don't want to see any documentation whatsoever.
+" set completeopt=longest,menuone,preview
+
+" Fetch full documentation during omnicomplete requests.
+" There is a performance penalty with this (especially on Mono).
+" By default, only Type/Method signatures are fetched. Full documentation can
+" still be fetched when you need it with the :OmniSharpDocumentation command.
+"let g:omnicomplete_fetch_full_documentation = 1
+
+" Set desired preview window height for viewing documentation.
+" You might also want to look at the echodoc plugin.
+set previewheight=5
+
+" Tell ALE to use OmniSharp for linting C# files, and no other linters.
+au Filetype cs let g:ale_linters['cs'] = ['OmniSharp']
+
+" Fetch semantic type/interface/identifier names on BufEnter and highlight them
+let g:OmniSharp_highlight_types = 1
+
+augroup omnisharp_commands
+    autocmd!
+
+    " When Syntastic is available but not ALE, automatic syntax check on events
+    " (TextChanged requires Vim 7.4)
+    " autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+
+    " Show type information automatically when the cursor stops moving
+    " autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+
+    " Update the highlighting whenever leaving insert mode
+    autocmd InsertLeave *.cs call OmniSharp#HighlightBuffer()
+
+    " Alternatively, use a mapping to refresh highlighting for the current buffer
+    autocmd FileType cs nnoremap <buffer> <Leader>th :OmniSharpHighlightTypes<CR>
+
+    " The following commands are contextual, based on the cursor position.
+    " Most of these should be moved to the language server global bindings,
+    " but OmniSharp appears to be badly broken from a pure lsp perspective
+    autocmd FileType cs nnoremap <buffer> gd :OmniSharpGotoDefinition<CR>
+    autocmd FileType cs nnoremap <buffer> <Leader>fi :OmniSharpFindImplementations<CR>
+    autocmd FileType cs nnoremap <buffer> <Leader>fs :OmniSharpFindSymbol<CR>
+    autocmd FileType cs nnoremap <buffer> <Leader>fu :OmniSharpFindUsages<CR>
+
+    " Finds members in the current buffer
+    autocmd FileType cs nnoremap <buffer> <Leader>fm :OmniSharpFindMembers<CR>
+
+    autocmd FileType cs nnoremap <buffer> <Leader>fx :OmniSharpFixUsings<CR>
+    autocmd FileType cs nnoremap <buffer> <Leader>tt :OmniSharpTypeLookup<CR>
+    autocmd FileType cs nnoremap <buffer> <Leader>dc :OmniSharpDocumentation<CR>
+    autocmd FileType cs nnoremap <buffer> <C-\> :OmniSharpSignatureHelp<CR>
+    autocmd FileType cs inoremap <buffer> <C-\> <C-o>:OmniSharpSignatureHelp<CR>
+
+    " Navigate up and down by method/property/field
+    autocmd FileType cs nnoremap <buffer> <C-h> :OmniSharpNavigateUp<CR>
+    autocmd FileType cs nnoremap <buffer> <C-l> :OmniSharpNavigateDown<CR>
+    " Contextual code actions (uses fzf, CtrlP or unite.vim when available)
+    autocmd FileType cs nnoremap <Leader><Space> :OmniSharpGetCodeActions<CR>
+augroup END
+
+" Run code actions with text selected in visual mode to extract method
+xnoremap <Leader><Space> :call OmniSharp#GetCodeActions('visual')<CR>
+
+" Rename with dialog
+nnoremap <Leader>nm :OmniSharpRename<CR>
+nnoremap <F2> :OmniSharpRename<CR>
+" Rename without dialog - with cursor on the symbol to rename: `:Rename newname`
+command! -nargs=1 Rename :call OmniSharp#RenameTo("<args>")
+
+nnoremap <Leader>cf :OmniSharpCodeFormat<CR>
+
+" Start the omnisharp server for the current solution
+nnoremap <Leader>ss :OmniSharpStartServer<CR>
+nnoremap <Leader>sp :OmniSharpStopServer<CR>
+
+" Enable snippet completion
+" let g:OmniSharp_want_snippet=1
