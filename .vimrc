@@ -36,6 +36,7 @@ nnoremap <leader>u yyp<C-v>$r-j
 nnoremap <leader>U yyp<C-v>$r=j
 
 syntax enable       " enable syntax highlighting because why wouldn't you?
+set mouse=a         " turn on mouse in all modes (could also be mouse=n for normal
 set number          " show line numbers
 set showcmd         " show command prefix in lower right
 set cursorline      " highlight the current line
