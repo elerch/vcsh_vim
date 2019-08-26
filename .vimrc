@@ -181,7 +181,7 @@ nnoremap <silent> gD :call LanguageClient_textDocument_typeDefinition()<CR>
 nnoremap <silent> <leader>r :call LanguageClient_textDocument_rename()<CR>
 "nnoremap <silent> <Leader><Space> :call LanguageClient_contextMenu()<CR>
 nnoremap <silent> <Leader><Space> :call LanguageClient_textDocument_codeAction()<CR>
-nnoremap <silent> cf :call LanguageClient_textDocument_formatting()<CR>
+nnoremap <silent> <leader>cf :call LanguageClient_textDocument_formatting()<CR>
 "Document highlight kills syntax highlighting
 " nnoremap <silent> fu :call LanguageClient_textDocument_documentHighlight()<CR>
 " nnoremap <silent> fx :call LanguageClient_clearDocumentHighlight()<CR>
