@@ -254,8 +254,7 @@ let g:LanguageClient_serverCommands.rust = ['rustup', 'run', 'stable', 'rls']
 
 " Official go language server is in the works, so everything else is kind of
 " broken. Bingo is the best for now in early 2019
-let s:output = system('command -v bingo')
-if !v:shell_error
+if executable('bingo')
     " go get github.com/sourcegraph/go-langserver
     " go nomodules get github.com/nsf/gocode
     let g:LanguageClient_serverCommands.go = ['bingo']
@@ -270,8 +269,7 @@ au Filetype go let g:ale_fixers['go'] = ['gofmt', 'goimports']
 " Python
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Python (pip install --user python-language-server)
-let s:output = system('command -v pyls')
-if !v:shell_error
+if executable('pyls')
     let g:LanguageClient_serverCommands.python = ['pyls']
 endif
 
@@ -285,8 +283,7 @@ au Filetype python let g:ale_linters['python'] = ['flake8']
 " direct plugin works ok, so we let Omnisharp override some of the Langauge
 " Server bindings below
 
-let s:output = system(expand('command -v ~/.omnisharp/omnisharp-roslyn/bin/mono.linux-x86_64'))
-if !v:shell_error
+if executable(expand('command -v ~/.omnisharp/omnisharp-roslyn/bin/mono.linux-x86_64'))
   " No worky: https://github.com/OmniSharp/omnisharp-roslyn/issues/1191
    let g:LanguageClient_serverCommands.cs = [expand('~/.omnisharp/omnisharp-roslyn/bin/mono.linux-x86_64'), expand('~/.omnisharp/omnisharp-roslyn/omnisharp/OmniSharp.exe'), '--languageserver', '--verbose' ]
 endif
