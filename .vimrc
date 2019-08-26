@@ -261,6 +261,15 @@ if executable('bingo')
     let g:LanguageClient_serverCommands.go = ['bingo']
     let g:LanguageClient_rootMarkers = { 'go': ['.git', 'go.mod'] }
 endif
+" gopls is the official one, but it's not as good as Bingo. As of 2019-07-19,
+" bingo forked gopls to make it better, so recommend you pull from there.
+" https://github.com/saibing/tools
+if executable('gopls')
+    " go get github.com/sourcegraph/go-langserver
+    " go nomodules get github.com/nsf/gocode
+    let g:LanguageClient_serverCommands.go = ['gopls']
+    let g:LanguageClient_rootMarkers = { 'go': ['.git', 'go.mod'] }
+endif
 " Golang uses tabs
 au Filetype go setlocal shiftwidth=4 tabstop=4 softtabstop=4 noexpandtab
 au Filetype go let g:ale_linters['go'] = ['go build', 'golint', 'gofmt', 'go vet']
