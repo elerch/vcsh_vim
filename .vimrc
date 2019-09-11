@@ -11,9 +11,9 @@ set encoding=utf-8  " termux on android needed this but nothing else?
 if has("termguicolors") && has("nvim")
   set termguicolors
 endif
-let g:molokai_transparent_bg=1
-colorscheme molokai " molokai colors pleasing to me
-let mapleader=","   " change leader to ',' from default '\'
+silent! let g:molokai_transparent_bg=1 " Can error in small vim
+silent! colorscheme molokai " molokai colors pleasing to me
+silent! let mapleader=","   " change leader to ',' from default '\'
 " Add shortcut to put it back in case we're on an ugly terminal
 " The ctermbg will mess with comment colors in a bad way, so we'll restore
 " by just setting colorscheme. This works due to the use of VimEnter above
@@ -35,8 +35,13 @@ nnoremap <leader>u yyp<C-v>$r-j
 " Leader U to underline (=)
 nnoremap <leader>U yyp<C-v>$r=j
 
-syntax enable       " enable syntax highlighting because why wouldn't you?
-set mouse=a         " turn on mouse in all modes (could also be mouse=n for normal
+if has('syntax')
+  syntax enable     " enable syntax highlighting because why wouldn't you?
+endif
+
+if has('mouse')
+  set mouse=a       " turn on mouse in all modes (could also be mouse=n for normal)
+endif
 set number          " show line numbers
 set showcmd         " show command prefix in lower right
 set cursorline      " highlight the current line
@@ -82,13 +87,15 @@ vnoremap <leader>C "*y
 
 " delete buffer, retain position
 " https://superuser.com/questions/289285/how-to-close-buffer-without-closing-the-window
-command Bd bp | sp | bn | bd
+if exists(':command') == 2
+  command Bd bp | sp | bn | bd
+endif
 
 " Install plug.vim if it doesn't exist
 if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !echo yo > ~/.vim/autoload/wow
   silent !mkdir -p ~/.vim/autoload
-  silent !url=https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim &&
-    \ { curl -fLo ~/.vim/autoload/plug.vim $url || wget -O ~/.vim/autoload/plug.vim $url; }
+  silent !url=https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim && { curl -fLo ~/.vim/autoload/plug.vim $url || wget -O ~/.vim/autoload/plug.vim $url; }
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
   " After plugins installed, kill the window it created
   autocmd VimEnter * sleep 1
@@ -96,16 +103,16 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 " Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
-call plug#begin('~/.vim/plugged')
-Plug 'chaoren/vim-wordmotion'
-Plug 'editorconfig/editorconfig'
-Plug 'benmills/vimux'
-Plug 'rust-lang/rust.vim'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'airblade/vim-gitgutter'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'w0rp/ale'
+silent! call plug#begin('~/.vim/plugged')
+silent! Plug 'chaoren/vim-wordmotion'
+silent! Plug 'editorconfig/editorconfig'
+silent! Plug 'benmills/vimux'
+silent! Plug 'rust-lang/rust.vim'
+silent! Plug 'vim-airline/vim-airline'
+silent! Plug 'vim-airline/vim-airline-themes'
+silent! Plug 'airblade/vim-gitgutter'
+silent! Plug 'ctrlpvim/ctrlp.vim'
+silent! Plug 'w0rp/ale'
 if !has('nvim')
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
@@ -123,10 +130,7 @@ if has('python3')
     Plug 'roxma/nvim-yarp'
     Plug 'ncm2/ncm2'
     " Language Server Protocol - works with ncm2
-    Plug 'autozimu/LanguageClient-neovim', {
-        \ 'branch': 'next',
-        \ 'do': 'bash install.sh'
-        \ }
+    Plug 'autozimu/LanguageClient-neovim', {'branch':'next','do':'bash install.sh'}
     Plug 'ncm2/ncm2-bufword'
     Plug 'ncm2/ncm2-path'
     " Use <TAB> to select the popup menu:
@@ -139,8 +143,8 @@ if has('python3')
   endif
   Plug 'OmniSharp/omnisharp-vim'
 endif
-Plug 'tomtom/tcomment_vim' " Commenting gcc or gc-motion
-call plug#end()
+silent! Plug 'tomtom/tcomment_vim' " Commenting gcc or gc-motion
+silent! call plug#end()
 
 " Airline
 " Not airline per-se, but this will turn off showing the mode in the command
@@ -154,24 +158,24 @@ set nocompatible
 if !empty(glob("$HOME/.fonts/PowerlineSymbols.otf"))
   let g:airline_powerline_fonts = 1
 endif
-let g:airline_theme='distinguished'
-let g:airline#extensions#tabline#enabled = 1
+silent! let g:airline_theme='distinguished'
+silent! let g:airline#extensions#tabline#enabled = 1
 " Only show buffers at the top if there are more than 1
-let g:airline#extensions#tabline#buffer_min_count =2
+silent! let g:airline#extensions#tabline#buffer_min_count =2
 " Enable ale warning/error count on status line
-let g:airline#extensions#ale#enabled = 1
+silent! let g:airline#extensions#ale#enabled = 1
 " '✖ '
-let airline#extensions#ale#error_symbol = '✗ '
-let airline#extensions#ale#warning_symbol = '⚠ '
+silent! let airline#extensions#ale#error_symbol = '✗ '
+silent! let airline#extensions#ale#warning_symbol = '⚠ '
 
 " Set LanguageClient configuration
-let g:LanguageClient_serverCommands = {}
+silent! let g:LanguageClient_serverCommands = {}
 " let g:LanguageClient_loggingLevel = 'INFO'
 " let g:LanguageClient_loggingFile =  expand('/tmp/LanguageClient.log')
 " let g:LanguageClient_serverStderr = expand('/tmp/LanguageServer.log')
 
 " Automatically start language servers.
-let g:LanguageClient_autoStart = 1
+silent! let g:LanguageClient_autoStart = 1
 
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 " Should this be 'fi'? In C# there are multiple, and that's what OmniSharp
@@ -188,15 +192,15 @@ nnoremap <silent> <leader>cf :call LanguageClient_textDocument_formatting()<CR>
 " nnoremap <silent> fx :call LanguageClient_clearDocumentHighlight()<CR>
 
 " Set Ctrl-P to mixed mode, which will search buffers, files, mru
-let g:ctrlp_cmd='CtrlPMixed'
+silent! let g:ctrlp_cmd='CtrlPMixed'
 
 " Let ale use Ctrl-k/Ctrl-J to navigate between errors
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 " '✗ ' '✖ '
-let g:ale_sign_error = '✗'
+silent! let g:ale_sign_error = '✗'
 " '⚠ '
-let g:ale_sign_warning = '▲'
+silent! let g:ale_sign_warning = '▲'
 "highlight clear ALEErrorSign
 "hi ALEErrorSign guifg=#FF0000
 "highlight clear ALEWarningSign
@@ -246,7 +250,7 @@ endif
 " Rust
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Rust directions on github https://github.com/rust-lang/rls
-let g:LanguageClient_serverCommands.rust = ['rustup', 'run', 'stable', 'rls']
+silent! let g:LanguageClient_serverCommands.rust = ['rustup', 'run', 'stable', 'rls']
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -302,7 +306,7 @@ endif
 "let g:OmniSharp_typeLookupInPreview = 1
 
 " Timeout in seconds to wait for a response from the server
-let g:OmniSharp_timeout = 5
+silent! let g:OmniSharp_timeout = 5
 
 " Don't autoselect first omnicomplete option, show options even if there is only
 " one (so the preview documentation is accessible). Remove 'preview' if you
@@ -323,7 +327,7 @@ set previewheight=5
 au Filetype cs let g:ale_linters['cs'] = ['OmniSharp']
 
 " Fetch semantic type/interface/identifier names on BufEnter and highlight them
-let g:OmniSharp_highlight_types = 1
+silent! let g:OmniSharp_highlight_types = 1
 
 augroup omnisharp_commands
     autocmd!
@@ -372,7 +376,7 @@ xnoremap <Leader><Space> :call OmniSharp#GetCodeActions('visual')<CR>
 nnoremap <Leader>nm :OmniSharpRename<CR>
 nnoremap <F2> :OmniSharpRename<CR>
 " Rename without dialog - with cursor on the symbol to rename: `:Rename newname`
-command! -nargs=1 Rename :call OmniSharp#RenameTo("<args>")
+silent! command! -nargs=1 Rename :call OmniSharp#RenameTo("<args>")
 
 nnoremap <Leader>cf :OmniSharpCodeFormat<CR>
 
