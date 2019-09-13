@@ -155,7 +155,7 @@ set noshowmode
 " Required by airline - allows operation on hidden buffers
 set hidden
 set nocompatible
-if !empty(glob("$HOME/.fonts/PowerlineSymbols.otf"))
+if !empty(glob("$HOME/.fonts/PowerlineSymbols.otf")) || !empty("/usr/share/fonts/opentype/PowerlineSymbols.otf")
   let g:airline_powerline_fonts = 1
 endif
 silent! let g:airline_theme='distinguished'
