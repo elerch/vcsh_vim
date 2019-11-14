@@ -113,6 +113,8 @@ silent! Plug 'vim-airline/vim-airline-themes'
 silent! Plug 'airblade/vim-gitgutter'
 silent! Plug 'ctrlpvim/ctrlp.vim'
 silent! Plug 'w0rp/ale'
+silent! Plug 'junegunn/vim-easy-align'
+
 if !has('nvim')
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
@@ -167,6 +169,12 @@ silent! let g:airline#extensions#ale#enabled = 1
 " '✖ '
 silent! let airline#extensions#ale#error_symbol = '✗ '
 silent! let airline#extensions#ale#warning_symbol = '⚠ '
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
 " Set LanguageClient configuration
 silent! let g:LanguageClient_serverCommands = {}
