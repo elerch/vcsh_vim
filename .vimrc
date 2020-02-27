@@ -9,7 +9,11 @@
 set encoding=utf-8  " termux on android needed this but nothing else?
 " true color support in neovim
 if has("termguicolors") && has("nvim")
-  set termguicolors
+  let mosh=system("is_mosh -v")
+  if empty(mosh)
+    set termguicolors " nvim+mosh+termguicolors does not work well. See:
+                      " https://github.com/neovim/neovim/issues/7490
+  endif
 endif
 silent! let g:molokai_transparent_bg=1 " Can error in small vim
 silent! colorscheme molokai " molokai colors pleasing to me
