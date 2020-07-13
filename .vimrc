@@ -217,6 +217,9 @@ silent! let g:ale_sign_warning = '▲'
 "hi ALEErrorSign guifg=#FF0000
 "highlight clear ALEWarningSign
 
+"turn on spell checking for markdown
+au Filetype markdown setlocal spell spelllang=en_us
+
 "there's probably a better way to do this, but we'll create a toggle for
 "yaml/cloudformation
 au Filetype cloudformation set syntax=yaml
