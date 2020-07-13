@@ -67,6 +67,11 @@ set foldenable        " enable folding
 set foldlevelstart=10 " leave most folds open - beyond 10? refactor!
 set foldnestmax=10    " only allow 10 nested folds ^^^^^^^^^^^^^^^^^
 set foldmethod=indent " indent (rather than marker). Not sure this is right
+set relativenumber
+set path=**             " Influences find command
+let g:netrw_banner=0    " No header spam in directory mode
+let g:netrw_liststyle=3 " Tree style
+
 " 'jk' in quick succession in insert mode = escape
 inoremap jk <esc>
                       " (this is the *BOMB*)
@@ -108,14 +113,12 @@ endif
 
 " Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
 silent! call plug#begin('~/.vim/plugged')
-silent! Plug 'chaoren/vim-wordmotion'
 silent! Plug 'editorconfig/editorconfig'
 silent! Plug 'benmills/vimux'
 silent! Plug 'rust-lang/rust.vim'
 silent! Plug 'vim-airline/vim-airline'
 silent! Plug 'vim-airline/vim-airline-themes'
 silent! Plug 'airblade/vim-gitgutter'
-silent! Plug 'ctrlpvim/ctrlp.vim'
 silent! Plug 'w0rp/ale'
 silent! Plug 'junegunn/vim-easy-align'
 
@@ -202,9 +205,6 @@ nnoremap <silent> <leader>cf :call LanguageClient_textDocument_formatting()<CR>
 "Document highlight kills syntax highlighting
 " nnoremap <silent> fu :call LanguageClient_textDocument_documentHighlight()<CR>
 " nnoremap <silent> fx :call LanguageClient_clearDocumentHighlight()<CR>
-
-" Set Ctrl-P to mixed mode, which will search buffers, files, mru
-silent! let g:ctrlp_cmd='CtrlPMixed'
 
 " Let ale use Ctrl-k/Ctrl-J to navigate between errors
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
