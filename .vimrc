@@ -71,6 +71,11 @@ set relativenumber
 set path=**             " Influences find command
 let g:netrw_banner=0    " No header spam in directory mode
 let g:netrw_liststyle=3 " Tree style
+" let g:netrw_browse_split=2      " open files in a new vertical split
+let g:netrw_browse_split=4        " open files in previous window (default behavior)
+let g_altv=1                      " ???
+let g:netrw_winsize=25            " 25% width of the page
+let g:netrw_list_hide=&wildignore " Have netrw respect wildignore
 
 " 'jk' in quick succession in insert mode = escape
 inoremap jk <esc>
