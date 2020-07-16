@@ -69,6 +69,15 @@ set foldnestmax=10    " only allow 10 nested folds ^^^^^^^^^^^^^^^^^
 set foldmethod=indent " indent (rather than marker). Not sure this is right
 set relativenumber
 set path=**             " Influences find command
+" Binary files that don't make much sense for vim
+set wildignore+=*.a,*.so,*.pyc,*.o,*.out,*.obj,*.rbc,*.rbo,*.class,.svn,*.gem,*.jar
+set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
+" Language, IDE, OS and VCS-specific cache and build directories
+set wildignore+=.git,.git/*.idea/
+set wildignore+=*/vendor/gems/*,*/vendor/cache/*,*/.bundle/*,*/.sass-cache/*
+set wildignore+=target/*,.node_modules/*
+" Backup files
+set wildignore+=*.swp,*~
 let g:netrw_banner=0    " No header spam in directory mode
 let g:netrw_liststyle=3 " Tree style
 " let g:netrw_browse_split=2      " open files in a new vertical split
