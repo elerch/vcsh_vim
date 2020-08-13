@@ -50,9 +50,10 @@ set number          " show line numbers
 set showcmd         " show command prefix in lower right
 set cursorline      " highlight the current line
 set laststatus=2    " show status line
-filetype indent on  " allow different indentation by filetype
-                    " e.g. ~/.vim/indent/python.vim for python
-filetype plugin on  " Omnisharp needs this
+" These can fail in tiny vim, etc.
+silent! filetype indent on  " allow different indentation by filetype
+                           " e.g. ~/.vim/indent/python.vim for python
+silent! filetype plugin on  " Omnisharp needs this
 set wildmenu        " visual autocomplete for command menu
 set lazyredraw      " don't redraw during macros
 set showmatch       " show matches in searches
@@ -78,13 +79,13 @@ set wildignore+=*/vendor/gems/*,*/vendor/cache/*,*/.bundle/*,*/.sass-cache/*
 set wildignore+=target/*,.node_modules/*
 " Backup files
 set wildignore+=*.swp,*~
-let g:netrw_banner=0    " No header spam in directory mode
-let g:netrw_liststyle=3 " Tree style
+silent! let g:netrw_banner=0    " No header spam in directory mode
+silent! let g:netrw_liststyle=3 " Tree style
 " let g:netrw_browse_split=2      " open files in a new vertical split
-let g:netrw_browse_split=4        " open files in previous window (default behavior)
-let g_altv=1                      " ???
-let g:netrw_winsize=25            " 25% width of the page
-let g:netrw_list_hide=&wildignore " Have netrw respect wildignore
+silent! let g:netrw_browse_split=4        " open files in previous window (default behavior)
+silent! let g_altv=1                      " ???
+silent! let g:netrw_winsize=25            " 25% width of the page
+silent! let g:netrw_list_hide=&wildignore " Have netrw respect wildignore
 
 " 'jk' in quick succession in insert mode = escape
 inoremap jk <esc>
@@ -119,10 +120,12 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   silent !echo yo > ~/.vim/autoload/wow
   silent !mkdir -p ~/.vim/autoload
   silent !url=https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim && { curl -fLo ~/.vim/autoload/plug.vim $url || wget -O ~/.vim/autoload/plug.vim $url; }
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-  " After plugins installed, kill the window it created
-  autocmd VimEnter * sleep 1
-  autocmd VimEnter * q
+  if has('autocmd')
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    " After plugins installed, kill the window it created
+    autocmd VimEnter * sleep 1
+    autocmd VimEnter * q
+  endif
 endif
 
 " Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
@@ -159,10 +162,12 @@ if has('python3')
     " Use <TAB> to select the popup menu:
     inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-    " Use silent! here because on first run we don't want an error to appear
-    autocmd BufEnter * silent! call ncm2#enable_for_buffer()
-    au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
-    au User Ncm2PopupClose set completeopt=menuone
+    if has('autocmd')
+      " Use silent! here because on first run we don't want an error to appear
+      autocmd BufEnter * silent! call ncm2#enable_for_buffer()
+      au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
+      au User Ncm2PopupClose set completeopt=menuone
+    endif
   endif
   Plug 'OmniSharp/omnisharp-vim'
 endif
@@ -231,19 +236,21 @@ silent! let g:ale_sign_warning = '▲'
 "hi ALEErrorSign guifg=#FF0000
 "highlight clear ALEWarningSign
 
-"turn on spell checking for markdown
-au Filetype markdown setlocal spell spelllang=en_us
+if has('autocmd')
+  "turn on spell checking for markdown
+  au Filetype markdown setlocal spell spelllang=en_us
 
-"there's probably a better way to do this, but we'll create a toggle for
-"yaml/cloudformation
-au Filetype cloudformation set syntax=yaml
-au Filetype cloudformation nmap <silent> <leader>t :set filetype=yaml<CR>
-au Filetype yaml nmap <silent> <leader>t :set filetype=cloudformation<CR>
+  "there's probably a better way to do this, but we'll create a toggle for
+  "yaml/cloudformation
+  au Filetype cloudformation set syntax=yaml
+  au Filetype cloudformation nmap <silent> <leader>t :set filetype=yaml<CR>
+  au Filetype yaml nmap <silent> <leader>t :set filetype=cloudformation<CR>
 
-nnoremap <leader>c :ALEFix<CR>
-" Hide completion stuff on command line (nvim only)
-if has('nvim')
-  set shortmess+=c
+  nnoremap <leader>c :ALEFix<CR>
+  " Hide completion stuff on command line (nvim only)
+  if has('nvim')
+    set shortmess+=c
+  endif
 endif
 
 " Vimux bindings - we interact with tmux, so the prefix is t
@@ -303,10 +310,12 @@ if executable('gopls')
     let g:LanguageClient_serverCommands.go = ['gopls']
     let g:LanguageClient_rootMarkers = { 'go': ['.git', 'go.mod'] }
 endif
-" Golang uses tabs
-au Filetype go setlocal shiftwidth=4 tabstop=4 softtabstop=4 noexpandtab
-au Filetype go let g:ale_linters['go'] = ['go build', 'golint', 'gofmt', 'go vet']
-au Filetype go let g:ale_fixers['go'] = ['gofmt', 'goimports']
+if has('autocmd')
+  " Golang uses tabs
+  au Filetype go setlocal shiftwidth=4 tabstop=4 softtabstop=4 noexpandtab
+  au Filetype go let g:ale_linters['go'] = ['go build', 'golint', 'gofmt', 'go vet']
+  au Filetype go let g:ale_fixers['go'] = ['gofmt', 'goimports']
+endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Python
@@ -316,8 +325,10 @@ if executable('pyls')
     let g:LanguageClient_serverCommands.python = ['pyls']
 endif
 
-" flake8 is better and we should not fall back to pylint
-au Filetype python let g:ale_linters['python'] = ['flake8']
+if has('autocmd')
+  " flake8 is better and we should not fall back to pylint
+  au Filetype python let g:ale_linters['python'] = ['flake8']
+endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " C#
@@ -352,51 +363,55 @@ silent! let g:OmniSharp_timeout = 5
 " You might also want to look at the echodoc plugin.
 set previewheight=5
 
-" Tell ALE to use OmniSharp for linting C# files, and no other linters.
-au Filetype cs let g:ale_linters['cs'] = ['OmniSharp']
+if has('autocmd')
+  " Tell ALE to use OmniSharp for linting C# files, and no other linters.
+  au Filetype cs let g:ale_linters['cs'] = ['OmniSharp']
+endif
 
 " Fetch semantic type/interface/identifier names on BufEnter and highlight them
 silent! let g:OmniSharp_highlight_types = 1
 
-augroup omnisharp_commands
-    autocmd!
+if has('autocmd')
+  augroup omnisharp_commands
+      autocmd!
 
-    " When Syntastic is available but not ALE, automatic syntax check on events
-    " (TextChanged requires Vim 7.4)
-    " autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+      " When Syntastic is available but not ALE, automatic syntax check on events
+      " (TextChanged requires Vim 7.4)
+      " autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
 
-    " Show type information automatically when the cursor stops moving
-    " autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+      " Show type information automatically when the cursor stops moving
+      " autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
 
-    " Update the highlighting whenever leaving insert mode
-    autocmd InsertLeave *.cs call OmniSharp#HighlightBuffer()
+      " Update the highlighting whenever leaving insert mode
+      autocmd InsertLeave *.cs call OmniSharp#HighlightBuffer()
 
-    " Alternatively, use a mapping to refresh highlighting for the current buffer
-    autocmd FileType cs nnoremap <buffer> <Leader>th :OmniSharpHighlightTypes<CR>
+      " Alternatively, use a mapping to refresh highlighting for the current buffer
+      autocmd FileType cs nnoremap <buffer> <Leader>th :OmniSharpHighlightTypes<CR>
 
-    " The following commands are contextual, based on the cursor position.
-    " Most of these should be moved to the language server global bindings,
-    " but OmniSharp appears to be badly broken from a pure lsp perspective
-    autocmd FileType cs nnoremap <buffer> gd :OmniSharpGotoDefinition<CR>
-    autocmd FileType cs nnoremap <buffer> <Leader>fi :OmniSharpFindImplementations<CR>
-    autocmd FileType cs nnoremap <buffer> <Leader>fs :OmniSharpFindSymbol<CR>
-    autocmd FileType cs nnoremap <buffer> <Leader>fu :OmniSharpFindUsages<CR>
+      " The following commands are contextual, based on the cursor position.
+      " Most of these should be moved to the language server global bindings,
+      " but OmniSharp appears to be badly broken from a pure lsp perspective
+      autocmd FileType cs nnoremap <buffer> gd :OmniSharpGotoDefinition<CR>
+      autocmd FileType cs nnoremap <buffer> <Leader>fi :OmniSharpFindImplementations<CR>
+      autocmd FileType cs nnoremap <buffer> <Leader>fs :OmniSharpFindSymbol<CR>
+      autocmd FileType cs nnoremap <buffer> <Leader>fu :OmniSharpFindUsages<CR>
 
-    " Finds members in the current buffer
-    autocmd FileType cs nnoremap <buffer> <Leader>fm :OmniSharpFindMembers<CR>
+      " Finds members in the current buffer
+      autocmd FileType cs nnoremap <buffer> <Leader>fm :OmniSharpFindMembers<CR>
 
-    autocmd FileType cs nnoremap <buffer> <Leader>fx :OmniSharpFixUsings<CR>
-    autocmd FileType cs nnoremap <buffer> <Leader>tt :OmniSharpTypeLookup<CR>
-    autocmd FileType cs nnoremap <buffer> <Leader>dc :OmniSharpDocumentation<CR>
-    autocmd FileType cs nnoremap <buffer> <C-\> :OmniSharpSignatureHelp<CR>
-    autocmd FileType cs inoremap <buffer> <C-\> <C-o>:OmniSharpSignatureHelp<CR>
+      autocmd FileType cs nnoremap <buffer> <Leader>fx :OmniSharpFixUsings<CR>
+      autocmd FileType cs nnoremap <buffer> <Leader>tt :OmniSharpTypeLookup<CR>
+      autocmd FileType cs nnoremap <buffer> <Leader>dc :OmniSharpDocumentation<CR>
+      autocmd FileType cs nnoremap <buffer> <C-\> :OmniSharpSignatureHelp<CR>
+      autocmd FileType cs inoremap <buffer> <C-\> <C-o>:OmniSharpSignatureHelp<CR>
 
-    " Navigate up and down by method/property/field
-    autocmd FileType cs nnoremap <buffer> <C-h> :OmniSharpNavigateUp<CR>
-    autocmd FileType cs nnoremap <buffer> <C-l> :OmniSharpNavigateDown<CR>
-    " Contextual code actions (uses fzf, CtrlP or unite.vim when available)
-    autocmd FileType cs nnoremap <Leader><Space> :OmniSharpGetCodeActions<CR>
-augroup END
+      " Navigate up and down by method/property/field
+      autocmd FileType cs nnoremap <buffer> <C-h> :OmniSharpNavigateUp<CR>
+      autocmd FileType cs nnoremap <buffer> <C-l> :OmniSharpNavigateDown<CR>
+      " Contextual code actions (uses fzf, CtrlP or unite.vim when available)
+      autocmd FileType cs nnoremap <Leader><Space> :OmniSharpGetCodeActions<CR>
+  augroup END
+endif
 
 " Run code actions with text selected in visual mode to extract method
 xnoremap <Leader><Space> :call OmniSharp#GetCodeActions('visual')<CR>
