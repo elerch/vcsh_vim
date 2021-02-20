@@ -138,6 +138,7 @@ silent! Plug 'vim-airline/vim-airline-themes'
 silent! Plug 'airblade/vim-gitgutter'
 silent! Plug 'w0rp/ale'
 silent! Plug 'junegunn/vim-easy-align'
+silent! Plug 'ziglang/zig.vim'
 
 if !has('nvim')
   Plug 'roxma/vim-hug-neovim-rpc'
