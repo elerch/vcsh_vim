@@ -131,7 +131,6 @@ endif
 " Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
 silent! call plug#begin('~/.vim/plugged')
 silent! Plug 'editorconfig/editorconfig'
-silent! Plug 'benmills/vimux'
 silent! Plug 'rust-lang/rust.vim'
 silent! Plug 'vim-airline/vim-airline'
 silent! Plug 'vim-airline/vim-airline-themes'
@@ -253,16 +252,6 @@ if has('autocmd')
     set shortmess+=c
   endif
 endif
-
-" Vimux bindings - we interact with tmux, so the prefix is t
-nnoremap <leader>tp :VimuxPromptCommand<CR>
-nnoremap <leader>tl :VimuxRunLastCommand<CR>
-inoremap <leader>tl <C-O>:VimuxRunLastCommand<CR>
-nnoremap <leader>ti :VimuxInspectRunner<CR>
-nnoremap <leader>tx :VimuxInterruptRunner<CR>
-nnoremap <leader>tq :VimuxCloseRunner<CR>
-" Use <bind-key> z to restore runner pane
-nnoremap <leader>tz :VimuxZoomRunner<CR>
 
 " Git gutter colors - I want my green back! :)
 highlight GitGutterAdd ctermfg=2 ctermbg=236 guifg=#009900 guibg=#232526
