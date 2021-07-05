@@ -128,8 +128,11 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   endif
 endif
 
-" Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
-silent! call plug#begin('~/.vim/plugged')
+if has('nvim')
+  silent! call plug#begin(stdpath('data') . '/plugged')
+else
+  silent! call plug#begin('~/.vim/plugged')
+endif
 silent! Plug 'editorconfig/editorconfig'
 silent! Plug 'rust-lang/rust.vim'
 silent! Plug 'vim-airline/vim-airline'
@@ -142,34 +145,52 @@ silent! Plug 'ziglang/zig.vim'
 if !has('nvim')
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
-" Also: pip3 install --user neovim jedi mistune psutil setproctitle
-if has('python3')
-  " neovim 0.x.x also reports version as 800 so this is ok
-  if v:version >= 800
-    " Only using fzf for lsp. It isn't totally necessary and the install
-    " messes with .bashrc and .zshrc, so I shall leave it commented for now
-    " PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run the install script
-    " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
-    " The plugins here theoretically work with vim8 but I suspect things
-    " will be broken. Have not tested.
-    Plug 'roxma/nvim-yarp'
-    Plug 'ncm2/ncm2'
-    " Language Server Protocol - works with ncm2
-    Plug 'autozimu/LanguageClient-neovim', {'branch':'next','do':'bash install.sh'}
-    Plug 'ncm2/ncm2-bufword'
-    Plug 'ncm2/ncm2-path'
-    " Use <TAB> to select the popup menu:
-    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-    if has('autocmd')
-      " Use silent! here because on first run we don't want an error to appear
-      autocmd BufEnter * silent! call ncm2#enable_for_buffer()
-      au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
-      au User Ncm2PopupClose set completeopt=menuone
+if has('nvim-0.5')
+  " Install plugins only. See init.vim for configuration of these
+
+  " nvim >= 0.5 wants things in lua, but we want to have a config that's
+  " progressively enhanced from old minimal vim to modern neovim
+  " Neovim 0.5 also has a built-in Language Server client, so we kind of
+  " want to ignore all the ncm2/LanguageClient stuff, and while we're at
+  " it, I feel Omnisharp is kind of an odd bird so I'm going to chill on that
+  " until I need it again
+
+  Plug 'neovim/nvim-lspconfig'
+  " Plug 'hrsh7th/nvim-compe'
+  Plug 'nvim-lua/completion-nvim'
+  Plug 'steelsojka/completion-buffers'
+  Plug 'nvim-treesitter/nvim-treesitter'
+else
+  " Also: pip3 install --user neovim jedi mistune psutil setproctitle
+  if has('python3')
+    " neovim 0.x.x also reports version as 800 so this is ok
+    if v:version >= 800
+      " Only using fzf for lsp. It isn't totally necessary and the install
+      " messes with .bashrc and .zshrc, so I shall leave it commented for now
+      " PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run the install script
+      " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+
+      " The plugins here theoretically work with vim8 but I suspect things
+      " will be broken. Have not tested.
+      Plug 'roxma/nvim-yarp'
+      Plug 'ncm2/ncm2'
+      " Language Server Protocol - works with ncm2
+      Plug 'autozimu/LanguageClient-neovim', {'branch':'next','do':'bash install.sh'}
+      Plug 'ncm2/ncm2-bufword'
+      Plug 'ncm2/ncm2-path'
+      " Use <TAB> to select the popup menu:
+      inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+      inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+      if has('autocmd')
+        " Use silent! here because on first run we don't want an error to appear
+        autocmd BufEnter * silent! call ncm2#enable_for_buffer()
+        au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
+        au User Ncm2PopupClose set completeopt=menuone
+      endif
     endif
+    Plug 'OmniSharp/omnisharp-vim'
   endif
-  Plug 'OmniSharp/omnisharp-vim'
 endif
 silent! Plug 'tomtom/tcomment_vim' " Commenting gcc or gc-motion
 silent! call plug#end()
@@ -211,19 +232,21 @@ silent! let g:LanguageClient_serverCommands = {}
 " Automatically start language servers.
 silent! let g:LanguageClient_autoStart = 1
 
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-" Should this be 'fi'? In C# there are multiple, and that's what OmniSharp
-" recommends
-nnoremap <silent> gi :call LanguageClient_textDocument_implementation()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> gD :call LanguageClient_textDocument_typeDefinition()<CR>
-nnoremap <silent> <leader>r :call LanguageClient_textDocument_rename()<CR>
-"nnoremap <silent> <Leader><Space> :call LanguageClient_contextMenu()<CR>
-nnoremap <silent> <Leader><Space> :call LanguageClient_textDocument_codeAction()<CR>
-nnoremap <silent> <leader>cf :call LanguageClient_textDocument_formatting()<CR>
-"Document highlight kills syntax highlighting
-" nnoremap <silent> fu :call LanguageClient_textDocument_documentHighlight()<CR>
-" nnoremap <silent> fx :call LanguageClient_clearDocumentHighlight()<CR>
+if !has('nvim-0.5')
+  nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+  " Should this be 'fi'? In C# there are multiple, and that's what OmniSharp
+  " recommends
+  nnoremap <silent> gi :call LanguageClient_textDocument_implementation()<CR>
+  nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+  nnoremap <silent> gD :call LanguageClient_textDocument_typeDefinition()<CR>
+  nnoremap <silent> <leader>r :call LanguageClient_textDocument_rename()<CR>
+  "nnoremap <silent> <Leader><Space> :call LanguageClient_contextMenu()<CR>
+  nnoremap <silent> <Leader><Space> :call LanguageClient_textDocument_codeAction()<CR>
+  nnoremap <silent> <leader>cf :call LanguageClient_textDocument_formatting()<CR>
+  "Document highlight kills syntax highlighting
+  " nnoremap <silent> fu :call LanguageClient_textDocument_documentHighlight()<CR>
+  " nnoremap <silent> fx :call LanguageClient_clearDocumentHighlight()<CR>
+endif
 
 " Let ale use Ctrl-k/Ctrl-J to navigate between errors
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
