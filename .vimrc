@@ -281,6 +281,29 @@ highlight GitGutterAdd ctermfg=2 ctermbg=236 guifg=#009900 guibg=#232526
 highlight GitGutterChange ctermfg=3 ctermbg=236 guifg=#bbbb00 guibg=#232526
 highlight GitGutterDelete ctermfg=1 ctermbg=236 guifg=#ff2222 guibg=#232526
 
+" Debugging. See also
+" https://gavinhoward.com/2020/12/my-development-environment-and-how-i-got-there/
+silent! packadd termdebug
+let g:termdebug_wide=1
+
+tnoremap <Esc> <C-\><C-n>
+tnoremap jk <C-\><C-n>
+noremap <RightMouse> :Evaluate<CR>
+noremap <leader>gg :Termdebug<CR>
+nnoremap <leader>gb :Break<CR>
+nnoremap <leader>gc :Clear<CR>
+nnoremap <leader>ge :Evaluate<CR>
+noremap <leader>gl :call TermDebugSendCommand('source .breakpoint-quicksave.bpt')<CR>
+noremap <leader>gs :call TermDebugSendCommand('save breakpoints .breakpoint-quicksave.bpt')<CR>
+noremap <leader>gq :call TermDebugSendCommand('quit')<CR>
+noremap <leader>gu :call TermDebugSendCommand('up')<CR>
+noremap <leader>gd :call TermDebugSendCommand('down')<CR>
+noremap <leader>g1 :Gdb<CR>
+noremap <leader>g2 :Program<CR>
+noremap <leader>g3 :Source<CR>
+noremap <leader>g5 :Continue<CR>
+noremap <leader>g8 :Step<CR>
+noremap <leader>g0 :Over<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Program Language Specific configuration
