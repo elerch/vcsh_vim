@@ -454,6 +454,10 @@ if has('autocmd')
       " Contextual code actions (uses fzf, CtrlP or unite.vim when available)
       autocmd FileType cs nnoremap <Leader><Space> :OmniSharpGetCodeActions<CR>
   augroup END
+  augroup mail_commands
+      autocmd FileType mail set spell
+      autocmd FileType mail set textwidth=0
+  augroup END
 endif
 
 " Run code actions with text selected in visual mode to extract method
