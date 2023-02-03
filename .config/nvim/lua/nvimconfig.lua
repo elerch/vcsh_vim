@@ -59,23 +59,27 @@ end
 -- so why not just enable them all??
 local servers = { "gopls", "pyright", "rust_analyzer", "tsserver", "zls" }
 for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
-    on_attach = on_attach,
-    flags = {
-      debounce_text_changes = 150,
+  if nvim_lsp[lsp].setup then
+    nvim_lsp[lsp].setup {
+      on_attach = on_attach,
+      flags = {
+        debounce_text_changes = 150,
+      }
     }
-  }
+  end
 end
 
 
 -- Treesitter
 
-
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-  ignore_install = {  }, -- List of parsers to ignore installing
-  highlight = {
-    enable = true,              -- false will disable the whole extension
-    disable = { },  -- list of language that will be disabled
-  },
-}
+local ts_configs = require 'nvim-treesitter.configs'
+if ts_configs.setup then
+  ts_configs.setup {
+    ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+    ignore_install = {  }, -- List of parsers to ignore installing
+    highlight = {
+      enable = true,              -- false will disable the whole extension
+      disable = { },  -- list of language that will be disabled
+    },
+  }
+end
