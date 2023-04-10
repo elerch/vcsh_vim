@@ -477,3 +477,9 @@ nnoremap <Leader>sp :OmniSharpStopServer<CR>
 
 " Enable snippet completion
 " let g:OmniSharp_want_snippet=1
+
+" Plugins weirdness I don't know what to do with directly. So we need to
+" pin these manually to specific commits:
+" nvim-treesitter @62ce774 supports nvim 0.6.1
+" nvim-lspconfig  @v0.1.3 supports nvim 0.6.1
+
