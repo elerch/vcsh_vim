@@ -214,9 +214,14 @@ silent! let g:airline#extensions#tabline#buffer_min_count =2
 " Enable ale warning/error count on status line
 silent! let g:airline#extensions#ale#enabled = 1
 " '✖ '
-silent! let airline#extensions#ale#error_symbol = '✗ '
-silent! let airline#extensions#ale#warning_symbol = '⚠ '
-
+silent! let airline#extensions#ale#error_symbol = ' '
+silent! let airline#extensions#ale#warning_symbol = '▲ '
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+silent! let g:airline_symbols.colnr = ':'
+" There is no reason for this symbol to be there - I find it confusing
+silent! let g:airline_symbols.maxlinenr = ' '
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 
@@ -251,8 +256,8 @@ endif
 " Let ale use Ctrl-k/Ctrl-J to navigate between errors
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
-" '✗ ' '✖ '
-silent! let g:ale_sign_error = '✗'
+" '✗ ' '✖ ', '', ''
+silent! let g:ale_sign_error = ''
 " '⚠ '
 silent! let g:ale_sign_warning = '▲'
 "highlight clear ALEErrorSign
