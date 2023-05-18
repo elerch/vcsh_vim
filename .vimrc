@@ -30,8 +30,19 @@ nnoremap <silent> <leader>s :update<CR>
 inoremap <leader>s <C-O>:update<CR>
 vnoremap <leader>s <C-C>:update<CR>
 " Leader k makes a checkmark (✓)
+" neither hack nerd font nor noto emojis do this
+" Debian bullseye seems to come with this version of emojis:
+" https://emojipedia.org/google/android-11.0/
+" But certain glyphs don't seem to be coming up
+" I think this is U+2713...
 inoremap <leader>k <C-k>OK
 nnoremap <leader>k i<C-k>OK <esc>h
+" We'll use nerd fonts for this for the time being, although it feels weird
+" using something in the Unicode private use area for something as simple as
+" a check mark. The emoji variants of check marks I found all render weird
+" in mlterm
+" inoremap <leader>k 
+" nnoremap <leader>k i<esc>h
 " Leader dg does a diffget
 nnoremap <leader>dg :diffget
 " Leader u to underline
