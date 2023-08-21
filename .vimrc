@@ -168,10 +168,16 @@ if has('nvim-0.5')
   " until I need it again
 
   Plug 'neovim/nvim-lspconfig'
-  " Plug 'hrsh7th/nvim-compe'
-  Plug 'nvim-lua/completion-nvim'
-  Plug 'steelsojka/completion-buffers'
+  Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+  " 9000+ Snippets
+  Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
   Plug 'nvim-treesitter/nvim-treesitter'
+  silent! let g:coq_settings = {
+        \ 'display.pum.source_context': ['|', '|'],
+        \ 'display.ghost_text.context': ['', ''],
+        \ 'auto_start': 'shut-up'
+        \ }
+
 else
   " Also: pip3 install --user neovim jedi mistune psutil setproctitle
   if has('python3')

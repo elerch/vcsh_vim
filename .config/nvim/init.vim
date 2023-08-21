@@ -3,9 +3,6 @@ let &packpath = &runtimepath
 source ~/.vimrc
 
 if has('nvim-0.5')
-  " Use completion-nvim in every buffer
-  autocmd BufEnter * lua require'completion'.on_attach()
-
   lua require('nvimconfig')
 
   " nvim >= 0.5 wants things in lua, but we want to have a config that's
