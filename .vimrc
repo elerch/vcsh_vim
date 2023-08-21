@@ -351,17 +351,6 @@ silent! let g:LanguageClient_serverCommands.rust = ['rustup', 'run', 'stable', '
 " Go
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Official go language server is in the works, so everything else is kind of
-" broken. Bingo is the best for now in early 2019
-if executable('bingo')
-    " go get github.com/sourcegraph/go-langserver
-    " go nomodules get github.com/nsf/gocode
-    let g:LanguageClient_serverCommands.go = ['bingo']
-    let g:LanguageClient_rootMarkers = { 'go': ['.git', 'go.mod'] }
-endif
-" gopls is the official one, but it's not as good as Bingo. As of 2019-07-19,
-" bingo forked gopls to make it better, so recommend you pull from there.
-" https://github.com/saibing/tools
 if executable('gopls')
     " go get github.com/sourcegraph/go-langserver
     " go nomodules get github.com/nsf/gocode
