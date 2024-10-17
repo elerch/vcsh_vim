@@ -211,7 +211,9 @@ else
     Plug 'OmniSharp/omnisharp-vim'
   endif
 endif
-silent! Plug 'tomtom/tcomment_vim' " Commenting gcc or gc-motion
+if !has('nvim-0.10')
+  silent! Plug 'tomtom/tcomment_vim' " Commenting gcc or gc-motion
+endif
 silent! call plug#end()
 
 " Airline
