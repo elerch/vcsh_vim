@@ -379,6 +379,8 @@ endif
 if has('autocmd')
   " flake8 is better and we should not fall back to pylint
   au Filetype python let g:ale_linters['python'] = ['flake8']
+  " bash doesn't have anything by default? This is copied from sh...
+  au Filetype bash let g:ale_linters['bash'] = ['bashate', 'cspell', 'language_server', 'shell', 'shellcheck']
 endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
