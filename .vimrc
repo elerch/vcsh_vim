@@ -344,6 +344,15 @@ if !empty(glob('~/.nvm/versions/node/v8.7.0/lib/node_modules/javascript-typescri
     let g:LanguageClient_serverCommands.javascript = [glob('~/.nvm/versions/node/v8.7.0/lib/node_modules/javascript-typescript-langserver/lib/language-server-stdio.js')]
 endif
 
+
+if has("nvim") && has('autocmd')
+  " Javascript seems to be set up for tabs?
+  " I don't remember this being a problem before
+  " au Filetype is better here, but doesn't seem to work...
+  au Filetype javascript setlocal tabstop=2 softtabstop=0 expandtab shiftwidth=2 smarttab " def tab settings
+  " BufEnter is working
+  au BufEnter *.js setlocal tabstop=2 softtabstop=0 expandtab shiftwidth=2 smarttab " def tab settings
+endif
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Rust
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
