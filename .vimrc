@@ -78,6 +78,7 @@ set colorcolumn=80 " sets a vertical ruler (maybe this should be 72?)
 set list           " show whitespace
 set listchars=tab:▸\ ,trail:_,extends:> " ,eol:¬ " chars (minus eol)
 set foldenable        " enable folding
+set foldlevel=10 " leave most folds open - beyond 10? refactor!
 set foldlevelstart=10 " leave most folds open - beyond 10? refactor!
 set foldnestmax=10    " only allow 10 nested folds ^^^^^^^^^^^^^^^^^
 set foldmethod=indent " indent (rather than marker). Not sure this is right

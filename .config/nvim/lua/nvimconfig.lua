@@ -69,7 +69,7 @@ end
 -- See https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
 -- NOTE: This does not seem to mind if the server doesn't exist -
 -- so why not just enable them all??
-local servers = { "gopls", "pyright", "rust_analyzer", "tsserver", "zls" }
+local servers = { "gopls", "pyright", "rust_analyzer", "ts_ls", "zls" }
 for _, lsp in ipairs(servers) do
   if nvim_lsp[lsp].setup then
     nvim_lsp[lsp].setup {
