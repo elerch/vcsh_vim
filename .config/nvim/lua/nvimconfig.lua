@@ -69,10 +69,11 @@ end
 -- See https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
 -- NOTE: This does not seem to mind if the server doesn't exist -
 -- so why not just enable them all??
-local servers = { "gopls", "pyright", "rust_analyzer", "ts_ls", "zls" }
+local servers = { "gopls", "pylsp", "rust_analyzer", "ts_ls", "zls" }
 for _, lsp in ipairs(servers) do
-  if nvim_lsp[lsp].setup then
-    nvim_lsp[lsp].setup {
+  local ok, server = pcall(function() return nvim_lsp[lsp] end)
+  if ok and server and server.setup then
+    server.setup {
       on_attach = on_attach,
       flags = {
         debounce_text_changes = 150,
@@ -80,7 +81,6 @@ for _, lsp in ipairs(servers) do
     }
   end
 end
-
 
 -- Treesitter
 
