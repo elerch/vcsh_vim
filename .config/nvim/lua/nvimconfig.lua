@@ -69,7 +69,28 @@ end
 -- See https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
 -- NOTE: This does not seem to mind if the server doesn't exist -
 -- so why not just enable them all??
-local servers = { "gopls", "pylsp", "rust_analyzer", "ts_ls", "zls" }
+local servers = { "gopls", "pylsp", "rust_analyzer", "zls" }
+-- Multiple lsps exist for typescript (deno, ts_ls, and probably bun). They
+-- do different things, for instance, deno understands where "Deno" comes from,
+-- but ts_ls doesn't. So we should prioritize the special cases, then use
+-- ts_ls if they aren't available
+local ts_server_executables = {
+  deno = "denols",
+}
+local ts_server_appended = false
+for executable, lsp in pairs(ts_server_executables) do
+  if vim.fn.executable(executable) == 1 then
+    table.insert(servers, lsp)
+    ts_server_appended = true
+    break
+  end
+end
+if not ts_server_appended then
+  -- Unconditionally add ts_ls if we have not found anything else. This will
+  -- cause an error message if we have TS/JS but no server is available at all
+  table.insert(servers, "ts_ls")
+end
+
 for _, lsp in ipairs(servers) do
   local ok, server = pcall(function() return nvim_lsp[lsp] end)
   if ok and server and server.setup then
