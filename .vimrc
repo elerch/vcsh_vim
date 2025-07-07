@@ -174,7 +174,7 @@ if has('nvim-0.5')
   Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
   " 9000+ Snippets
   Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
-  Plug 'nvim-treesitter/nvim-treesitter'
+  Plug 'nvim-treesitter/nvim-treesitter', {'branch': 'main'}  ", 'do': ':TSUpdate'}
   silent! let g:coq_settings = {
         \ 'display.pum.source_context': ['|', '|'],
         \ 'display.ghost_text.context': ['', ''],

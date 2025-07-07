@@ -104,8 +104,17 @@ for _, lsp in ipairs(servers) do
 end
 
 -- Treesitter
+local function safe_require(module_name)
+    local status, result = pcall(require, module_name)
+    if status then
+        return result
+    else
+        return nil
+    end
+end
 
-local ts_configs = require 'nvim-treesitter.configs'
+local ts_configs = safe_require('nvim-treesitter.configs') or safe_require('nvim-treesitter.config')
+
 if ts_configs.setup then
   ts_configs.setup {
     ensure_installed = "all", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
