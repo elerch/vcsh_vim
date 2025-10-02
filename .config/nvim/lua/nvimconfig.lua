@@ -17,8 +17,6 @@ vim.api.nvim_set_keymap('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', 
 vim.api.nvim_set_keymap('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})
 
 -- Language server
-local nvim_lsp = require('lspconfig')
-
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
@@ -92,15 +90,14 @@ if not ts_server_appended then
 end
 
 for _, lsp in ipairs(servers) do
-  local ok, server = pcall(function() return nvim_lsp[lsp] end)
-  if ok and server and server.setup then
-    server.setup {
+  vim.lsp.enable(lsp)
+  vim.lsp.config(lsp, {
       on_attach = on_attach,
       flags = {
         debounce_text_changes = 150,
       }
     }
-  end
+  )
 end
 
 -- Treesitter
