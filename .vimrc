@@ -175,11 +175,7 @@ if has('nvim-0.5')
   " 9000+ Snippets
   Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
   Plug 'nvim-treesitter/nvim-treesitter', {'branch': 'main'}  ", 'do': ':TSUpdate'}
-  silent! let g:coq_settings = {
-        \ 'display.pum.source_context': ['|', '|'],
-        \ 'display.ghost_text.context': ['', ''],
-        \ 'auto_start': 'shut-up'
-        \ }
+  silent! let g:coq_settings = { 'display.pum.source_context': ['|', '|'], 'display.ghost_text.context': ['', ''], 'auto_start': 'shut-up' }
 
 else
   " Also: pip3 install --user neovim jedi mistune psutil setproctitle
@@ -311,7 +307,7 @@ highlight GitGutterDelete ctermfg=1 ctermbg=236 guifg=#ff2222 guibg=#232526
 " Debugging. See also
 " https://gavinhoward.com/2020/12/my-development-environment-and-how-i-got-there/
 silent! packadd termdebug
-let g:termdebug_wide=1
+silent! let g:termdebug_wide=1
 
 tnoremap <Esc> <C-\><C-n>
 tnoremap jk <C-\><C-n>
