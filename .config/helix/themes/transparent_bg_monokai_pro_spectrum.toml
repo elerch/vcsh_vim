@@ -1,0 +1,6 @@
+inherits = "monokai_pro_spectrum"
+"ui.background" = {}
+"ui.cursorline.primary" = { fg = "#888888", bg = "#222222" }
+"ui.cursorline.secondary" = { fg = "#666666", bg = "#222222" }
+"ui.statusline.insert" = { fg = "black", bg = "yellow" }
+"ui.statusline.select" = { fg = "black", bg = "light-red" }
