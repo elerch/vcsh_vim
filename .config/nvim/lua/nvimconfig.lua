@@ -100,6 +100,16 @@ for _, lsp in ipairs(servers) do
   )
 end
 
+-- Trigger on_attach when LSP attaches (nvim 0.11+ only)
+if vim.fn.has('nvim-0.11') == 1 then
+  vim.api.nvim_create_autocmd('LspAttach', {
+    callback = function(args)
+      local client = vim.lsp.get_client_by_id(args.data.client_id)
+      on_attach(client, args.buf)
+    end,
+  })
+end
+
 -- Treesitter
 local function safe_require(module_name)
     local status, result = pcall(require, module_name)

@@ -170,7 +170,10 @@ if has('nvim-0.5')
   " it, I feel Omnisharp is kind of an odd bird so I'm going to chill on that
   " until I need it again
 
-  Plug 'neovim/nvim-lspconfig'
+  " nvim-lspconfig only needed for 0.5-0.10; 0.11+ has built-in vim.lsp.enable()
+  if !has('nvim-0.11')
+    Plug 'neovim/nvim-lspconfig'
+  endif
   Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
   " 9000+ Snippets
   Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
