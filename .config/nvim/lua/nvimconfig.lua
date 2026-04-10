@@ -132,3 +132,31 @@ if ts_configs.setup then
     },
   }
 end
+
+vim.filetype.add({
+  extension = {
+    srf = "srf",
+  },
+})
+vim.api.nvim_create_autocmd("User", {
+  pattern = "TSUpdate",
+  callback = function()
+    require("nvim-treesitter.parsers").srf = {
+      install_info = {
+        url = "https://github.com/elerch/srf-tree-sitter",
+        branch = "master",
+        queries = "queries",
+      },
+    }
+    vim.treesitter.language.register("srf", "srf")
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "srf",
+  callback = function(args)
+    pcall(vim.treesitter.start, args.buf)
+  end,
+})
+
+
