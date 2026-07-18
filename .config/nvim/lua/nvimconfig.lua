@@ -62,12 +62,19 @@ local on_attach = function(client, bufnr)
   end
 end
 
+-- set up srf_lsp config
+vim.lsp.config("srf_lsp", {
+    cmd = { "srf-lsp" },
+    filetypes = { "srf" },
+    root_markers = { ".git", "/" }, -- single file lsp server only
+})
+
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
 -- See https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
 -- NOTE: This does not seem to mind if the server doesn't exist -
 -- so why not just enable them all??
-local servers = { "gopls", "pylsp", "rust_analyzer", "zls" }
+local servers = { "gopls", "pylsp", "rust_analyzer", "zls", "srf_lsp" }
 -- Multiple lsps exist for typescript (deno, ts_ls, and probably bun). They
 -- do different things, for instance, deno understands where "Deno" comes from,
 -- but ts_ls doesn't. So we should prioritize the special cases, then use
